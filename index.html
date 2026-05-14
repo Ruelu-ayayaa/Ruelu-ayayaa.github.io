@@ -1,28 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>闲人的小站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>闲有多闲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 48px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            border-left: 4px solid #764ba2;
+            padding-left: 16px;
+            margin: 16px 0 32px 0;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #444;
+            margin: 32px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        .story-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .story-list li {
+            margin: 16px 0;
+            padding: 16px 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .story-list li:hover {
+            transform: translateX(8px);
+            background: #f1f3f5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .story-list a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #667eea;
+            display: block;
+        }
+
+        .story-list a:hover {
+            color: #764ba2;
+        }
+
+        .story-list .desc {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        .under-construction {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .under-construction li {
+            padding: 12px 16px;
+            background: #fef5e7;
+            border-radius: 12px;
+            margin: 12px 0;
+            color: #e67e22;
+            border-left: 4px solid #e67e22;
+        }
+
+        hr {
+            margin: 32px 0;
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #667eea, #764ba2, transparent);
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            margin-top: 24px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 32px 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>📚 闲人的小站</h1>
-    
-    <p>欢迎我的朋友来访！</p>
-    
-    <h2>✍️ 短篇小说</h2>
-    
-    <ul>
-        <li><a href="novel1.md">雨夜</a></li>
-        <li><a href="novel2.md">镜中人</a></li>
-    </ul>
-    
-    <hr>
-    
-    <h2>🚧 施工中（后续更新）</h2>
-    
-    <ul>
-        <li>西安攻略</li>
-        <li>EVA 全集解析</li>
-    </ul>
+    <div class="container">
+        <div class="card">
+            <h1>
+                📚 闲有多闲
+            </h1>
+            <div class="subtitle">
+                攻略 · 动漫解析 · 短篇小说
+            </div>
+
+            <h2>✍️ 短篇小说</h2>
+            <ul class="story-list">
+                <li>
+                    <a href="novel1.md">🌙 五分钟余生</a>
+                    <div class="desc">一个关于守护的故事</div>
+                </li>
+                <li>
+                    <a href="novel2.md">🪞 嗜睡成谜</a>
+                    <div class="desc"> 梦醒时分，有人说我杀了人？</div>
+                </li>
+            </ul>
+
+            <hr>
+
+            <h2>🚧 施工中</h2>
+            <ul class="under-construction">
+                <li>🗺️ 西安攻略（整理中）</li>
+                <li>🎬 进击的巨人 全集解析（制作中）</li>
+                <li>📝 更多内容，敬请期待</li>
+            </ul>
+        </div>
+        <div class="footer">
+            © 2026 闲有多闲 | 慢慢建设中
+        </div>
+    </div>
 </body>
 </html>
