@@ -12,115 +12,124 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2d3e2b;
             min-height: 100vh;
             padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .card {
-            background: white;
-            border-radius: 24px;
+            background: #faf6e9;
+            border-radius: 32px;
             padding: 48px 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            margin-bottom: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border: 1px solid #c4a77a;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
         }
 
         h1 {
-            font-size: 2.8rem;
-            color: #333;
-            margin-bottom: 8px;
+            font-size: 3rem;
+            color: #3b5a2c;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: #8b6b3d;
+            font-size: 1rem;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .nav-item {
+            background: #fef9ef;
+            border-radius: 20px;
+            padding: 28px 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid #d4b88c;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item:hover {
+            transform: translateY(-6px);
+            background: #fff7ea;
+            border-color: #7c9e6e;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        .nav-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .nav-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #4a6b38;
+        }
+
+        .nav-desc {
+            font-size: 0.85rem;
+            color: #a08152;
+            margin-top: 8px;
+        }
+
+        .construction {
+            background: #f3efdf;
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 20px;
+            border-left: 6px solid #b88b4a;
+        }
+
+        .construction h3 {
+            color: #6f4e2e;
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+        }
+
+        .construction ul {
+            list-style: none;
+            color: #8b6946;
+        }
+
+        .construction li {
+            padding: 6px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            border-left: 4px solid #764ba2;
-            padding-left: 16px;
-            margin: 16px 0 32px 0;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            color: #444;
-            margin: 32px 0 20px 0;
-            padding-bottom: 8px;
-            border-bottom: 3px solid #667eea;
-            display: inline-block;
-        }
-
-        .story-list {
-            list-style: none;
-            margin: 20px 0;
-        }
-
-        .story-list li {
-            margin: 16px 0;
-            padding: 16px 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            border-left: 4px solid #667eea;
-        }
-
-        .story-list li:hover {
-            transform: translateX(8px);
-            background: #f1f3f5;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .story-list a {
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #667eea;
-            display: block;
-        }
-
-        .story-list a:hover {
-            color: #764ba2;
-        }
-
-        .story-list .desc {
-            font-size: 0.9rem;
-            color: #888;
-            margin-top: 6px;
-        }
-
-        .under-construction {
-            list-style: none;
-            margin: 20px 0;
-        }
-
-        .under-construction li {
-            padding: 12px 16px;
-            background: #fef5e7;
-            border-radius: 12px;
-            margin: 12px 0;
-            color: #e67e22;
-            border-left: 4px solid #e67e22;
+            gap: 10px;
         }
 
         hr {
             margin: 32px 0;
             border: none;
             height: 2px;
-            background: linear-gradient(to right, #667eea, #764ba2, transparent);
+            background: linear-gradient(to right, #c4a77a, #7c9e6e, #c4a77a);
         }
 
         .footer {
             text-align: center;
-            color: rgba(255,255,255,0.8);
+            color: #c4b38c;
             margin-top: 24px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         @media (max-width: 600px) {
@@ -130,46 +139,58 @@
             h1 {
                 font-size: 2rem;
             }
-            h2 {
-                font-size: 1.4rem;
+            .nav-title {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>
-                📚 闲人的小站
-            </h1>
-            <div class="subtitle">
-                攻略 · 动漫解析 · 短篇小说
-            </div>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1>🌿 闲人的小站</h1>
+            <p>旅行 · 小说 · 动漫 · 读书</p>
+        </div>
 
-            <h2>✍️ 短篇小说</h2>
-            <ul class="story-list">
-                <li>
-                    <a href="novel1.md">🌙 五分钟余生</a>
-                    <div class="desc">一个关于守护的故事</div>
-                </li>
-                <li>
-                    <a href="novel2.md">🪞 嗜睡成谜</a>
-                    <div class="desc">梦醒时分，有人说我杀了人？</div>
-                </li>
-            </ul>
+        <div class="nav-grid">
+            <a href="travel.html" class="nav-item">
+                <span class="nav-icon">🗺️</span>
+                <div class="nav-title">旅行</div>
+                <div class="nav-desc">攻略 · 足迹</div>
+            </a>
+            <a href="novel.html" class="nav-item">
+                <span class="nav-icon">✍️</span>
+                <div class="nav-title">小说</div>
+                <div class="nav-desc">短篇 · 故事</div>
+            </a>
+            <a href="anime.html" class="nav-item">
+                <span class="nav-icon">🎬</span>
+                <div class="nav-title">动漫</div>
+                <div class="nav-desc">解析 · 全集</div>
+            </a>
+            <a href="reading.html" class="nav-item">
+                <span class="nav-icon">📖</span>
+                <div class="nav-title">读书</div>
+                <div class="nav-desc">笔记 · 书单</div>
+            </a>
+        </div>
 
-            <hr>
-
-            <h2>🚧 施工中</h2>
-            <ul class="under-construction">
-                <li>🗺️ 西安攻略（整理中）</li>
-                <li>🎬 EVA 全集解析（制作中）</li>
-                <li>📝 更多内容，敬请期待</li>
+        <div class="construction">
+            <h3>📌 正在加载中</h3>
+            <ul>
+                <li>🗺️ 旅行版块｜西安、成都攻略整理中</li>
+                <li>🎬 动漫版块｜EVA 全集解析制作中</li>
+                <li>📖 读书版块｜近期阅读笔记即将上线</li>
+                <li>✍️ 小说版块｜已上架两篇短篇</li>
             </ul>
         </div>
+
+        <hr>
         <div class="footer">
-            © 2026 闲人的小站 | 慢慢建设中
+            🌱 慢慢建设，随心更新
         </div>
     </div>
+</div>
 </body>
 </html>
