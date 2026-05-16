@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说卷 - 内容博物馆</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #f4f4f2 0%, #eaeae6 70%, #dfdfda 100%);
+            color: #1e293b;
+            font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            min-height: 100vh;
+        }
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        .museum-card {
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(160, 155, 140, 0.15);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .museum-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px rgba(130, 125, 110, 0.25);
+        }
+        .museum-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--accent-color, #8c3a1d);
+            transition: width 0.3s ease;
+        }
+        .museum-card:hover::after { width: 8px; }
+
+        .modern-tag {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+        .museum-card:hover .modern-tag {
+            color: #ffffff;
+            border-color: var(--tag-glow, #f43f5e);
+            background: var(--tag-glow, #f43f5e);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        /* 展项略缩图 */
+        .exhibit-thumb {
+            height: 120px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            filter: grayscale(0.5) contrast(1.2);
+            transition: all 0.5s ease;
+        }
+        .museum-card:hover .exhibit-thumb {
+            filter: grayscale(0) contrast(1);
+        }
+    </style>
+</head>
+<body class="antialiased pt-32 pb-24 px-4">
+
+    <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-50 nav-glass px-8 py-3 rounded-full flex gap-8 text-xs tracking-widest uppercase text-slate-500">
+        <a href="index.html" class="hover:text-slate-900 transition">首页</a>
+        <a href="novels.html" class="text-slate-900 font-bold transition">小说</a>
+        <a href="anime.html" class="hover:text-slate-900 transition">动漫</a>
+        <a href="travel.html" class="hover:text-slate-900 transition">游记</a>
+    </nav>
+
+    <header class="max-w-6xl mx-auto mb-16 text-center md:text-left">
+        <h1 class="text-3xl md:text-4xl font-light tracking-widest text-slate-800 mb-2 uppercase">
+            Novels Pavilion <span class="font-normal text-slate-400">/ 小说卷</span>
+        </h1>
+        <p class="text-xs text-slate-400 tracking-wider">通过视听密码，解析文字之下的灵魂波动。</p>
+        <div class="h-[1px] w-12 bg-slate-300 mt-4 mx-auto md:mx-0"></div>
+    </header>
+
+    <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="museum-card p-6 rounded-xl flex flex-col justify-between min-h-[400px] cursor-pointer group" 
+             style="--accent-color: #c27d38; --tag-glow: #c27d38;"
+             onclick="window.location.href='reader.html?file=novel1'">
+            <div>
+                <img src="https://images.unsplash.com/photo-1515621061946-eff1c2a352bd?q=80&w=600&auto=format&fit=crop" class="exhibit-thumb" alt="都市深夜雨景">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="modern-tag text-[9px] uppercase px-2.5 py-1 rounded-full font-mono tracking-wider"># 暖伤 · 宿命</span>
+                    <span class="text-[10px] font-mono text-slate-300 group-hover:text-amber-700 transition">EX_01</span>
+                </div>
+                <h2 class="text-xl font-normal text-slate-800 group-hover:text-amber-800 transition mb-3 tracking-wide">五分钟余生</h2>
+                <p class="text-xs text-slate-500 leading-relaxed font-light">如果生命只剩下最后的余晖，你会选择自己留下，还是把白昼送给陷入黑暗的他？一对至亲兄弟的终局时刻。</p>
+            </div>
+            <div class="mt-6 flex justify-between items-center text-[10px] text-slate-400 uppercase tracking-tighter">
+                <span>🕯️ CANDLE / 🌧️ RAIN</span>
+                <span class="group-hover:translate-x-1 transition-transform font-bold">ENTER ➔</span>
+            </div>
+        </div>
+
+        <div class="museum-card p-6 rounded-xl flex flex-col justify-between min-h-[400px] cursor-pointer group" 
+             style="--accent-color: #9b1c1c; --tag-glow: #9b1c1c;"
+             onclick="window.location.href='reader.html?file=novel2'">
+            <div>
+                <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=600&auto=format&fit=crop" class="exhibit-thumb" alt="晚香玉花卉美学">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="modern-tag text-[9px] uppercase px-2.5 py-1 rounded-full font-mono tracking-wider"># 悬疑 · 梦境</span>
+                    <span class="text-[10px] font-mono text-slate-300 group-hover:text-rose-700 transition">EX_02</span>
+                </div>
+                <h2 class="text-xl font-normal text-slate-800 group-hover:text-rose-900 transition mb-3 tracking-wide">嗜睡成谜</h2>
+                <p class="text-xs text-slate-500 leading-relaxed font-light">一觉醒来，冰冷的手铐扣在腕间。所有人都在告诉她：你在梦里杀死了他。分不清现实与幻境的挣扎。</p>
+            </div>
+            <div class="mt-6 flex justify-between items-center text-[10px] text-slate-400 uppercase tracking-tighter">
+                <span>🔮 BELL / 🍃 WIND</span>
+                <span class="group-hover:translate-x-1 transition-transform font-bold">ENTER ➔</span>
+            </div>
+        </div>
+
+        <div class="museum-card p-6 rounded-xl flex flex-col justify-between min-h-[400px] cursor-pointer group" 
+             style="--accent-color: #2c3e50; --tag-glow: #e67e22;"
+             onclick="window.location.href='reader.html?file=novel3'">
+            <div>
+                <img src="http://googleusercontent.com/image_collection/image_retrieval/9288621106471891178" class="exhibit-thumb" alt="Industrial Iron">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="modern-tag text-[9px] uppercase px-2.5 py-1 rounded-full font-mono tracking-wider"># 工业 · 沉浮</span>
+                    <span class="text-[10px] font-mono text-slate-300 group-hover:text-slate-600 transition">EX_03</span>
+                </div>
+                <h2 class="text-xl font-normal text-slate-800 group-hover:text-slate-900 transition mb-3 tracking-wide">槐安</h2>
+                <p class="text-xs text-slate-500 leading-relaxed font-light">东北重工业时代的铁色天空下，两兄弟在轰鸣的工厂与纷飞的落雪中，踏上一条不归的升沉之路。</p>
+            </div>
+            <div class="mt-6 flex justify-between items-center text-[10px] text-slate-400 uppercase tracking-tighter">
+                <span>⚙️ IRON / ❄️ SNOW</span>
+                <span class="group-hover:translate-x-1 transition-transform font-bold">ENTER ➔</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-5xl mx-auto mt-24 text-center text-[10px] text-slate-400 tracking-widest font-mono">
+        MUSEUM OF CONTENT · ALL RIGHTS RESERVED
+    </footer>
+
+</body>
+</html>

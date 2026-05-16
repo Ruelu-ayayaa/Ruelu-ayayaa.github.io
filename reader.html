@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沉浸阅览室 - 内容博物馆</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: "Songti SC", "SimSun", "STSong", serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background: var(--bg-color, #dfd5c3);
+            transition: background 0.8s ease;
+        }
+        #bg-effect-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* --- 💎 核心升级：出版物级高级精细排版 --- */
+        #content p {
+            font-size: 1.05rem;          /* 调小字号，告别空旷感与老人机视感 */
+            line-height: 1.95;           /* 行高收窄，文字更加紧凑聚焦 */
+            margin-bottom: 1.4rem !important; /* 段后间距大幅收窄，排版更显高级细腻 */
+            text-indent: 2em;
+            text-align: justify;
+            color: var(--text-color, #2c2421);
+        }
+
+        /* 章节名视觉收紧 */
+        .chapter-node {
+            text-align: center;
+            margin: 3.5rem 0 1.8rem 0;
+            color: var(--accent-color, #8c3a1d);
+            font-size: 1.35rem;         /* 略微调小章节名，使其更加精致 */
+            font-weight: bold;
+            letter-spacing: 0.15em;
+        }
+
+        .glass-panel {
+            border: 1px solid var(--border-color, rgba(140, 58, 29, 0.3));
+            background: var(--panel-bg, rgba(253, 251, 247, 0.85));
+            color: var(--panel-text, #2c2421);
+            backdrop-filter: blur(8px);
+            transition: all 0.5s ease;
+        }
+        .exit-button {
+            position: fixed; left: 2rem; top: 50%; transform: translateY(-50%);
+            writing-mode: vertical-rl; letter-spacing: 0.2em; padding: 1.5rem 0.6rem; z-index: 50; cursor: pointer;
+        }
+        .exit-button:hover { background: var(--accent-color, #8c3a1d) !important; color: #fdfbf7 !important; border-color: var(--accent-color, #8c3a1d) !important; }
+
+        .progress-sidebar {
+            position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 0.8rem; /* 进度条间距微调收紧 */
+            border-left: 2px solid var(--track-color, rgba(140, 58, 29, 0.2)); padding-left: 1rem; z-index: 40;
+        }
+        .progress-dot {
+            font-size: 0.8rem; color: var(--sub-text, #786b65);
+            cursor: pointer; transition: all 0.3s; position: relative; white-space: nowrap;
+        }
+        .progress-dot:hover { color: var(--accent-color, #8c3a1d); transform: scale(1.05); }
+        .progress-dot.active { color: var(--accent-color, #8c3a1d); font-weight: bold; }
+        .progress-dot.active::before { content: "✦"; position: absolute; left: -1.45rem; color: var(--accent-color, #8c3a1d); }
+
+        /* 纸张容器微调 */
+        .reader-paper {
+            background: var(--paper-bg, #fdfbf7);
+            border: 1px solid var(--border-color, #d3c4a8);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.05);
+            min-height: 70vh;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .reader-paper::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(to right, var(--accent-color, #8c3a1d), var(--border-color, #d3c4a8), var(--accent-color, #8c3a1d));
+        }
+        input[type="range"] { accent-color: var(--accent-color, #8c3a1d); }
+    </style>
+</head>
+<body class="antialiased py-20 px-4"> <canvas id="bg-effect-canvas"></canvas>
+
+    <a href="novels.html" class="exit-button glass-panel rounded-md text-xs font-bold text-center">
+        ← 归还书架
+    </a>
+
+    <div id="sidebar-progress" class="progress-sidebar hidden md:flex flex-col"></div>
+
+    <div class="fixed bottom-8 left-8 z-50 glass-panel p-4 rounded-xl flex flex-col gap-3 text-xs">
+        <div class="font-bold border-b pb-1 mb-1 flex items-center gap-1" id="ambient-title" style="border-color: var(--border-color)">
+            <span>⚙️</span> 环境调音台
+        </div>
+        <div class="flex items-center justify-between gap-4">
+            <label class="cursor-pointer flex items-center gap-1">
+                <input type="checkbox" id="sound1-toggle" class="rounded focus:ring-0">
+                <span id="sound1-label">🔥 环境 A</span>
+            </label>
+            <input type="range" id="sound1-volume" min="0" max="1" step="0.1" value="0.5" class="w-16">
+        </div>
+        <div class="flex items-center justify-between gap-4">
+            <label class="cursor-pointer flex items-center gap-1">
+                <input type="checkbox" id="sound2-toggle" class="rounded focus:ring-0">
+                <span id="sound2-label">🌧️ 环境 B</span>
+            </label>
+            <input type="range" id="sound2-volume" min="0" max="1" step="0.1" value="0.5" class="w-16">
+        </div>
+    </div>
+
+    <audio id="audio-1" loop></audio>
+    <audio id="audio-2" loop></audio>
+
+    <div class="max-w-3xl mx-auto relative">
+        <article id="content" class="reader-paper p-6 md:p-12 rounded-sm">
+            <div class="flex justify-center items-center py-20 text-stone-400 italic">正在布置阅览室...</div>
+        </article>
+        <div class="mt-16 mb-24 text-center text-stone-300 text-3xl">❦</div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const fileName = urlParams.get('file');
+
+        const skins = {
+            'novel1': {
+                effect: 'candle', bgColor: '#dfd5c3', paperBg: '#fdfbf7', textColor: '#2c2421', subText: '#786b65',
+                borderColor: 'rgba(140, 58, 29, 0.25)', accentColor: '#8c3a1d', panelBg: 'rgba(253, 251, 247, 0.9)', 
+                panelText: '#3e3631', trackColor: 'rgba(140, 58, 29, 0.2)', ambientTitle: '🕯️ 暖伤阅览室',
+                sound1: { label: '🔥 炉火劈啪', src: 'https://music.163.com/song/media/outer/url?id=453089456.mp3' },
+                sound2: { label: '🌧️ 窗外夜雨', src: 'https://music.163.com/song/media/outer/url?id=453089458.mp3' }
+            },
+            'novel2': {
+                effect: 'fog', bgColor: '#141816', paperBg: '#1c201e', textColor: '#e2e8f0', subText: '#94a3b8',
+                borderColor: 'rgba(155, 28, 28, 0.5)', accentColor: '#f43f5e', panelBg: 'rgba(30, 41, 59, 0.9)', 
+                panelText: '#f8fafc', trackColor: 'rgba(244, 63, 94, 0.3)', ambientTitle: '👁️ 悬疑解谜室',
+                sound1: { label: '🔮 梦境风铃', src: 'https://music.163.com/song/media/outer/url?id=1383021481.mp3' },
+                sound2: { label: '🍃 荒野冷风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' }
+            },
+            'novel3': {
+                effect: 'snow', bgColor: '#2d3436', paperBg: '#ececec', textColor: '#2d3436', subText: '#636e72',
+                borderColor: '#636e72', accentColor: '#d35400', panelBg: 'rgba(45, 52, 54, 0.9)', 
+                panelText: '#fdfdfd', trackColor: 'rgba(211, 84, 0, 0.3)', ambientTitle: '⚙️ 工业沉浮室',
+                sound1: { label: '⚙️ 钢铁咆哮', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
+                sound2: { label: '❄️ 寒冬凛风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' } 
+            }
+        };
+
+        const currentSkin = skins[fileName] || skins['novel1'];
+        const root = document.documentElement;
+        root.style.setProperty('--bg-color', currentSkin.bgColor);
+        root.style.setProperty('--paper-bg', currentSkin.paperBg);
+        root.style.setProperty('--text-color', currentSkin.textColor);
+        root.style.setProperty('--sub-text', currentSkin.subText);
+        root.style.setProperty('--border-color', currentSkin.borderColor);
+        root.style.setProperty('--accent-color', currentSkin.accentColor);
+        root.style.setProperty('--panel-bg', currentSkin.panelBg);
+        root.style.setProperty('--panel-text', currentSkin.panelText);
+        root.style.setProperty('--track-color', currentSkin.trackColor);
+
+        document.getElementById('ambient-title').innerText = currentSkin.ambientTitle;
+        document.getElementById('sound1-label').innerText = currentSkin.sound1.label;
+        document.getElementById('sound2-label').innerText = currentSkin.sound2.label;
+        
+        const audio1 = document.getElementById('audio-1');
+        const audio2 = document.getElementById('audio-2');
+        audio1.src = currentSkin.sound1.src; audio2.src = currentSkin.sound2.src;
+
+        // --- Canvas 特效引擎 ---
+        const canvas = document.getElementById('bg-effect-canvas');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let particles = [];
+        let candleRadius = 0, candleTargetRadius = 400;
+
+        class Particle {
+            constructor(type) { this.type = type; this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width;
+                if (this.type === 'fog') {
+                    this.y = canvas.height + Math.random() * 100;
+                    this.size = Math.random() * 150 + 100;
+                    this.vy = -(Math.random() * 0.3 + 0.1);
+                    this.alpha = Math.random() * 0.08 + 0.04;
+                } else {
+                    this.y = Math.random() * -canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.vy = Math.random() * 2 + 1;
+                    this.vx = Math.random() * 1 - 0.5;
+                    this.alpha = Math.random() * 0.6 + 0.2;
+                }
+            }
+            update() {
+                if (this.type === 'fog') {
+                    this.y += this.vy; if (this.y < -this.size) this.init();
+                } else {
+                    this.y += this.vy; this.x += this.vx; if (this.y > canvas.height) this.init();
+                }
+            }
+            draw() {
+                ctx.save();
+                if (this.type === 'fog') {
+                    let g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                    g.addColorStop(0, `rgba(45, 65, 55, ${this.alpha})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+                } else {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        if (currentSkin.effect === 'fog' || currentSkin.effect === 'snow') {
+            particles = [];
+            let count = currentSkin.effect === 'fog' ? 30 : 150;
+            for (let i = 0; i < count; i++) particles.push(new Particle(currentSkin.effect));
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (currentSkin.effect === 'candle') {
+                if (Math.random() > 0.93) candleTargetRadius = Math.random() * 150 + 350;
+                candleRadius += (candleTargetRadius - candleRadius) * 0.08;
+                let g = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, candleRadius);
+                g.addColorStop(0, '#f5edd7'); g.addColorStop(0.6, '#dfd5c3'); g.addColorStop(1, '#c0b49c');
+                ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = currentSkin.bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- 💎 核心升级：强力兼容的多格式章节解析算法 ---
+        if (fileName) {
+            marked.setOptions({ breaks: true, gfm: true });
+            fetch(`novels/${fileName}.md`)
+                .then(r => r.text())
+                .then(text => {
+                    let idx = 0;
+                    let lines = text.split('\n').map(l => {
+                        let t = l.trim();
+                        
+                        // 正则升级：
+                        // 1. 匹配类似《第一章》或 1. 这种原本的格式
+                        // 2. 匹配 1-1, 1-2, 2-1 这种复合工业章节格式
+                        // 3. 匹配独立的一行纯数字 3 或 4
+                        if (/^《.*》$/.test(t) || /^\d+\.$/.test(t) || /^\d+-\d+$/.test(t) || /^\d+$/.test(t)) {
+                            idx++; 
+                            return `<div id="chapter-${idx}" class="chapter-node">${t}</div>`;
+                        }
+                        return t;
+                    });
+                    document.getElementById('content').innerHTML = marked.parse(lines.join('\n\n'));
+                    document.title = text.split('\n')[0].replace('# ', '').trim() + " - 沉浸阅读";
+                    generateSidebar(idx);
+                });
+        }
+
+        function generateSidebar(total) {
+            const sb = document.getElementById('sidebar-progress');
+            sb.innerHTML = '';
+            for (let i = 1; i <= total; i++) {
+                const el = document.getElementById(`chapter-${i}`);
+                if (!el) continue;
+                const dot = document.createElement('div');
+                dot.className = `progress-dot chapter-dot-${i}`;
+                dot.innerText = el.innerText;
+                dot.onclick = () => el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                sb.appendChild(dot);
+            }
+            window.addEventListener('scroll', () => {
+                let active = 1;
+                for (let i = 1; i <= total; i++) {
+                    const el = document.getElementById(`chapter-${i}`);
+                    if (el && window.scrollY >= el.offsetTop - window.innerHeight / 2) active = i;
+                }
+                document.querySelectorAll('.progress-dot').forEach(d => d.classList.remove('active'));
+                const activeDot = document.querySelector(`.chapter-dot-${active}`);
+                if (activeDot) activeDot.classList.add('active');
+            });
+        }
+
+        const s1T = document.getElementById('sound1-toggle'), s2T = document.getElementById('sound2-toggle');
+        const s1V = document.getElementById('sound1-volume'), s2V = document.getElementById('sound2-volume');
+        audio1.volume = s1V.value; audio2.volume = s2V.value;
+        s1T.addEventListener('change', function() { if (this.checked) audio1.play(); else audio1.pause(); });
+        s2T.addEventListener('change', function() { if (this.checked) audio2.play(); else audio2.pause(); });
+        s1V.addEventListener('input', function() { audio1.volume = this.value; });
+        s2V.addEventListener('input', function() { audio2.volume = this.value; });
+    </script>
+</body>
+</html>
