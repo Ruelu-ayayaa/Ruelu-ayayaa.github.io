@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* 自定义动态背景：让网站看起来像流动的液体 */
         body {
             margin: 0;
             min-height: 100vh;
@@ -26,7 +25,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 玻璃态通用样式 */
         .glass-effect {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
@@ -34,104 +32,109 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
         }
+
+        /* 音乐旋转控制：暂停时停止旋转 */
+        .is-paused {
+            animation-play-state: paused !important;
+        }
     </style>
 </head>
 <body class="antialiased">
-
 
     <nav class="fixed top-8 z-50 glass-effect px-6 py-3 rounded-full flex gap-2 md:gap-6 text-white/80 text-sm font-medium transition-all">
         <a href="index.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
             🏠 首页
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-        
         <a href="novels.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
             📖 小说
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-
         <a href="anime.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
             🌸 动漫
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-
         <a href="travel.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
             ✈️ 游记
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-
         <a href="#lab" class="px-3 py-1 hover:text-white transition-all relative group/nav">
             🧪 实验区
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
     </nav>
 
-    <main class="mt-32 w-full max-w-6xl px-6">
+    <main class="mt-32 w-full max-w-6xl px-6 mb-24">
         <header class="mb-12 text-center text-white">
             <h1 class="text-4xl font-bold tracking-tight">欢迎来到我的内容博物馆</h1>
             <p class="mt-4 text-white/70 italic">“这里存着我所有乱七八糟的浪漫。”</p>
         </header>
 
         <div id="content-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-white/20 cursor-pointer overflow-hidden">
+            
+            <a href="novels.html" class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-white/20 overflow-hidden block">
                 <div class="absolute -right-4 -bottom-4 text-8xl font-serif text-white/5 opacity-10 group-hover:opacity-20 transition-opacity">文</div>
-                
                 <div class="relative z-10">
                     <span class="px-3 py-1 bg-amber-200/20 text-amber-200 text-xs rounded-full border border-amber-200/30">📖 小说连载</span>
-                    <h3 class="text-2xl font-bold text-white mt-4 mb-3">《某场大雨后的告别》</h3>
+                    <h3 class="text-2xl font-bold text-white mt-4 mb-3">《她说》</h3>
                     <p class="text-white/60 text-sm leading-relaxed line-clamp-3">
-                        伞骨断裂的那一刻，我听见了夏天破碎的声音。街道尽头的路灯闪烁着，仿佛在为这场无声的告别打着节拍...
+                        他们终于说出了她最想听的话，在她死后，讲给一个听不懂中文的外国人听...
                     </p>
                     <div class="mt-6 flex items-center text-amber-200 text-sm font-medium">
                         阅读全文 <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] cursor-pointer">
+            <a href="anime.html" class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] block">
                 <div class="relative z-10">
                     <span class="px-3 py-1 bg-purple-400/20 text-purple-200 text-xs rounded-full border border-purple-400/30">🌸 动漫解析</span>
                     <h3 class="text-2xl font-bold text-white mt-4 mb-3">赛博朋克的色彩美学</h3>
                     <div class="w-full h-32 bg-gradient-to-tr from-purple-500/30 to-blue-500/30 rounded-2xl mb-4 border border-white/10 flex items-center justify-center">
-                        <span class="text-white/20 text-4xl">🎬</span>
+                        <span class="text-white/20 text-4xl group-hover:scale-110 transition-transform">🎬</span>
                     </div>
-                    <p class="text-white/60 text-sm">解析《边缘行者》中如何利用对比色塑造悲剧感。</p>
+                    <p class="text-white/60 text-sm">拆解《进击的巨人》全部剧情。</p>
+                    <div class="mt-4 flex items-center text-purple-200 text-sm font-medium">
+                        查看解析 <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-emerald-500/10 cursor-pointer">
+            <a href="travel.html" class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-emerald-500/10 block">
                 <div class="relative z-10">
                     <span class="px-3 py-1 bg-emerald-400/20 text-emerald-200 text-xs rounded-full border border-emerald-400/30">✈️ 避世指南</span>
-                    <h3 class="text-2xl font-bold text-white mt-4 mb-3">在京都的雨天弄丢地图</h3>
-                    <p class="text-white/60 text-sm mb-4">不一定要去清水寺，那些藏在巷子里的老茶屋才是灵魂所在...</p>
-                    <div class="flex gap-2">
-                        <span class="text-[10px] bg-white/10 px-2 py-1 rounded"># 日本</span>
-                        <span class="text-[10px] bg-white/10 px-2 py-1 rounded"># 摄影</span>
+                    <h3 class="text-2xl font-bold text-white mt-4 mb-3">在苏杭的雨天弄丢地图</h3>
+                    <p class="text-white/60 text-sm mb-4">不一定要去寺庙，那些藏在巷子里的老茶屋才是灵魂所在...</p>
+                    <div class="flex gap-2 mb-4">
+                        <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white/80"># 日本</span>
+                        <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white/80"># 摄影</span>
+                    </div>
+                    <div class="mt-2 flex items-center text-emerald-200 text-sm font-medium">
+                        漫游指南 <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="group relative bg-black/10 backdrop-blur-md rounded-3xl p-8 border-2 border-dashed border-white/20 flex flex-col items-center justify-center text-center transition-all duration-500 hover:border-white/40">
+            <div id="lab" class="group relative bg-black/10 backdrop-blur-md rounded-3xl p-8 border-2 border-dashed border-white/20 flex flex-col items-center justify-center text-center transition-all duration-500 hover:border-white/40">
                 <div class="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
                     <div class="w-full h-[2px] bg-white/10 absolute top-0 animate-scan"></div>
                 </div>
                 
                 <div class="relative z-10">
                     <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🧪</div>
-                    <h3 class="text-xl font-mono font-bold text-white/80">Project: Pending</h3>
+                    <h3 class="text-xl font-mono font-bold text-white/80">Project: Mood Board</h3>
                     <p class="text-xs text-white/40 mt-2 font-mono leading-relaxed">
-                        数据上传中... <br>
-                        这里未来可能是一个“碎碎念”留言板，<br>
-                        或者是一个互动的 3D 动画。
+                        点击下方切换今日心情背景
                     </p>
-                    <div class="w-32 h-1 bg-white/10 mt-6 rounded-full overflow-hidden">
-                        <div class="h-full bg-white/40 w-2/3 animate-pulse"></div>
+                    <div class="flex gap-2 mt-4 justify-center">
+                        <button onclick="changeMood('romantic')" class="px-2 py-1 bg-white/10 hover:bg-white/20 text-xs rounded text-white">🔮 浪漫</button>
+                        <button onclick="changeMood('cyber')" class="px-2 py-1 bg-white/10 hover:bg-white/20 text-xs rounded text-white">🌃 霓虹</button>
+                        <button onclick="changeMood('forest')" class="px-2 py-1 bg-white/10 hover:bg-white/20 text-xs rounded text-white">🌲 宁静</button>
                     </div>
                 </div>
             </div>
 
             <style>
-                /* 扫描线动画 */
                 @keyframes scan {
                     0% { top: 0%; }
                     100% { top: 100%; }
@@ -143,42 +146,67 @@
         </div>
     </main>
 
-
-
-
-<div class="fixed bottom-8 left-8 z-[100] group">
-    <div class="glass-effect flex items-center p-2 rounded-2xl transition-all duration-700 ease-in-out max-w-[60px] group-hover:max-w-[300px] overflow-hidden shadow-2xl">
-        
-        <div class="relative min-w-[44px] h-[44px] rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-inner overflow-hidden">
-            <span class="text-xl animate-spin-slow">💿</span>
-            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
-        </div>
-
-        <div class="ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200 whitespace-nowrap pr-4">
-            <div class="mb-1">
-                <p class="text-xs font-bold text-white/90 truncate w-32">正在播放：深夜电台</p>
-                <p class="text-[10px] text-white/50 italic">Lofi Hip Hop Mix</p>
-            </div>
+    <div class="fixed bottom-8 left-8 z-[100] group">
+        <div class="glass-effect flex items-center p-2 rounded-2xl transition-all duration-700 ease-in-out max-w-[60px] group-hover:max-w-[300px] overflow-hidden shadow-2xl">
             
-            <div class="flex items-center gap-4 text-white/80">
-                <button class="hover:text-white hover:scale-110 transition cursor-pointer text-sm">⏮</button>
-                <button class="hover:text-white hover:scale-125 transition cursor-pointer text-lg">▶️</button>
-                <button class="hover:text-white hover:scale-110 transition cursor-pointer text-sm">⏭</button>
+            <div class="relative min-w-[44px] h-[44px] rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-inner overflow-hidden">
+                <span id="cd-icon" class="text-xl animate-spin-slow is-paused">💿</span>
+                <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+            </div>
+
+            <div class="ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200 whitespace-nowrap pr-4">
+                <div class="mb-1">
+                    <p class="text-xs font-bold text-white/90 truncate w-32">正在播放：深夜电台</p>
+                    <p class="text-[10px] text-white/50 italic">Lofi Hip Hop Mix</p>
+                </div>
+                
+                <div class="flex items-center gap-4 text-white/80">
+                    <button class="hover:text-white hover:scale-110 transition cursor-pointer text-sm">⏮</button>
+                    <button id="play-btn" onclick="togglePlay()" class="hover:text-white hover:scale-125 transition cursor-pointer text-lg">▶️</button>
+                    <button class="hover:text-white hover:scale-110 transition cursor-pointer text-sm">⏭</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    /* 让唱片转起来的动画 */
-    @keyframes spin-slow {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .animate-spin-slow {
-        animation: spin-slow 6s linear infinite;
-    }
-</style>
+    <style>
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 6s linear infinite;
+        }
+    </style>
 
+    <script>
+        // 1. 控制电台播放与CD旋转
+        let isPlaying = false;
+        function togglePlay() {
+            const cd = document.getElementById('cd-icon');
+            const btn = document.getElementById('play-btn');
+            isPlaying = !isPlaying;
+            
+            if(isPlaying) {
+                cd.classList.remove('is-paused');
+                btn.innerText = '⏸';
+            } else {
+                cd.classList.add('is-paused');
+                btn.innerText = '▶️';
+            }
+        }
+
+        // 2. 实验区：动态修改全站渐变背景
+        function changeMood(mood) {
+            if(mood === 'romantic') {
+                document.body.style.background = "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)";
+            } else if(mood === 'cyber') {
+                document.body.style.background = "linear-gradient(-45deg, #0f172a, #1e1b4b, #581c87, #0284c7)";
+            } else if(mood === 'forest') {
+                document.body.style.background = "linear-gradient(-45deg, #064e3b, #047857, #115e59, #0f766e)";
+            }
+            document.body.style.backgroundSize = "400% 400%";
+        }
+    </script>
 </body>
 </html>

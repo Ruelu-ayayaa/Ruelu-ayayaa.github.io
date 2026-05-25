@@ -22,22 +22,21 @@
             pointer-events: none;
         }
         
-        /* --- 💎 核心升级：出版物级高级精细排版 --- */
+        /* 出版物级高级精细排版 */
         #content p {
-            font-size: 1.05rem;          /* 调小字号，告别空旷感与老人机视感 */
-            line-height: 1.95;           /* 行高收窄，文字更加紧凑聚焦 */
-            margin-bottom: 1.4rem !important; /* 段后间距大幅收窄，排版更显高级细腻 */
+            font-size: 1.05rem;
+            line-height: 1.95;
+            margin-bottom: 1.4rem !important;
             text-indent: 2em;
             text-align: justify;
             color: var(--text-color, #2c2421);
         }
 
-        /* 章节名视觉收紧 */
         .chapter-node {
             text-align: center;
             margin: 3.5rem 0 1.8rem 0;
             color: var(--accent-color, #8c3a1d);
-            font-size: 1.35rem;         /* 略微调小章节名，使其更加精致 */
+            font-size: 1.35rem;
             font-weight: bold;
             letter-spacing: 0.15em;
         }
@@ -57,7 +56,7 @@
 
         .progress-sidebar {
             position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 0.8rem; /* 进度条间距微调收紧 */
+            display: flex; flex-direction: column; gap: 0.8rem;
             border-left: 2px solid var(--track-color, rgba(140, 58, 29, 0.2)); padding-left: 1rem; z-index: 40;
         }
         .progress-dot {
@@ -68,7 +67,6 @@
         .progress-dot.active { color: var(--accent-color, #8c3a1d); font-weight: bold; }
         .progress-dot.active::before { content: "✦"; position: absolute; left: -1.45rem; color: var(--accent-color, #8c3a1d); }
 
-        /* 纸张容器微调 */
         .reader-paper {
             background: var(--paper-bg, #fdfbf7);
             border: 1px solid var(--border-color, #d3c4a8);
@@ -135,9 +133,9 @@
                 sound2: { label: '🌧️ 窗外夜雨', src: 'https://music.163.com/song/media/outer/url?id=453089458.mp3' }
             },
             'novel2': {
-                effect: 'fog', bgColor: '#141816', paperBg: '#1c201e', textColor: '#e2e8f0', subText: '#94a3b8',
-                borderColor: 'rgba(155, 28, 28, 0.5)', accentColor: '#f43f5e', panelBg: 'rgba(30, 41, 59, 0.9)', 
-                panelText: '#f8fafc', trackColor: 'rgba(244, 63, 94, 0.3)', ambientTitle: '👁️ 悬疑解谜室',
+                effect: 'fog', bgColor: '#0f1715', paperBg: '#18221f', textColor: '#e2e8f0', subText: '#8ca39e',
+                borderColor: 'rgba(92, 143, 128, 0.3)', accentColor: '#a78bfa', panelBg: 'rgba(24, 34, 31, 0.85)', 
+                panelText: '#e2e8f0', trackColor: 'rgba(167, 139, 250, 0.3)', ambientTitle: '👁️ 悬疑解谜室',
                 sound1: { label: '🔮 梦境风铃', src: 'https://music.163.com/song/media/outer/url?id=1383021481.mp3' },
                 sound2: { label: '🍃 荒野冷风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' }
             },
@@ -145,8 +143,24 @@
                 effect: 'snow', bgColor: '#2d3436', paperBg: '#ececec', textColor: '#2d3436', subText: '#636e72',
                 borderColor: '#636e72', accentColor: '#d35400', panelBg: 'rgba(45, 52, 54, 0.9)', 
                 panelText: '#fdfdfd', trackColor: 'rgba(211, 84, 0, 0.3)', ambientTitle: '⚙️ 工业沉浮室',
-                sound1: { label: '⚙️ 钢铁咆哮', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
+                sound1: { label: '⚙️ 钢铁鸣响', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
                 sound2: { label: '❄️ 寒冬凛风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' } 
+            },
+            /* 🌿 莫兰迪色系升级：克制、治愈、无刺眼荧光，保留呼吸气泡逻辑 */
+            'novel4': {
+                effect: 'snow', // 复用粒子基类结构
+                bgColor: '#a3b19b', // 莫兰迪豆沙新绿底色
+                paperBg: '#f4f6f3', // 极其淡雅优雅的莫兰迪灰绿纸张
+                textColor: '#2e382b', // 克制的灰黑绿字，柔和不伤眼
+                subText: '#697565', 
+                borderColor: 'rgba(163, 177, 155, 0.4)', 
+                accentColor: '#5a6b5c', // 莫兰迪深青绿作为强调色
+                panelBg: 'rgba(244, 246, 243, 0.9)', 
+                panelText: '#2e382b', 
+                trackColor: 'rgba(90, 107, 92, 0.2)', 
+                ambientTitle: '🌱 寂静森林独白室',
+                sound1: { label: '🎵 森林木琴', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
+                sound2: { label: '🍃 旷野清风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' } 
             }
         };
 
@@ -170,7 +184,6 @@
         const audio2 = document.getElementById('audio-2');
         audio1.src = currentSkin.sound1.src; audio2.src = currentSkin.sound2.src;
 
-        // --- Canvas 特效引擎 ---
         const canvas = document.getElementById('bg-effect-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -179,6 +192,7 @@
 
         let particles = [];
         let candleRadius = 0, candleTargetRadius = 400;
+        let time = 0; // 用于平滑渐变流动的计时器
 
         class Particle {
             constructor(type) { this.type = type; this.init(); }
@@ -188,30 +202,49 @@
                     this.y = canvas.height + Math.random() * 100;
                     this.size = Math.random() * 150 + 100;
                     this.vy = -(Math.random() * 0.3 + 0.1);
-                    this.alpha = Math.random() * 0.08 + 0.04;
+                    this.alpha = Math.random() * 0.06 + 0.03;
                 } else {
-                    this.y = Math.random() * -canvas.height;
-                    this.size = Math.random() * 3 + 1;
-                    this.vy = Math.random() * 2 + 1;
-                    this.vx = Math.random() * 1 - 0.5;
-                    this.alpha = Math.random() * 0.6 + 0.2;
+                    // novel4：气泡无声自下而上升腾
+                    if (fileName === 'novel4') {
+                        this.y = canvas.height + Math.random() * canvas.height;
+                        this.vy = -(Math.random() * 0.8 + 0.3); // 降低上升速度，呈现宁静呼吸感
+                        this.size = Math.random() * 4 + 1.5;   // 略微调大一点气泡感
+                    } else {
+                        this.y = Math.random() * -canvas.height;
+                        this.vy = Math.random() * 2 + 1; 
+                        this.size = Math.random() * 3 + 1;
+                    }
+                    this.vx = Math.random() * 0.4 - 0.2; // 稍微带有一点左右平移，像水里上升的真实气泡
+                    this.alpha = Math.random() * 0.4 + 0.15; // 莫兰迪克制半透明
                 }
             }
             update() {
                 if (this.type === 'fog') {
                     this.y += this.vy; if (this.y < -this.size) this.init();
                 } else {
-                    this.y += this.vy; this.x += this.vx; if (this.y > canvas.height) this.init();
+                    this.y += this.vy; this.x += this.vx;
+                    if (fileName === 'novel4') {
+                        if (this.y < -20) this.init();
+                    } else {
+                        if (this.y > canvas.height) this.init();
+                    }
                 }
             }
             draw() {
                 ctx.save();
                 if (this.type === 'fog') {
                     let g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                    g.addColorStop(0, `rgba(45, 65, 55, ${this.alpha})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+                    g.addColorStop(0, `rgba(28, 44, 40, ${this.alpha})`); g.addColorStop(1, 'rgba(0,0,0,0)');
                     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
                 } else {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                    if (fileName === 'novel4') {
+                        // ✨ 莫兰迪质感：剔除高饱绿和粉红荧光，换用半透明柔白/浅沙金气泡
+                        ctx.fillStyle = `rgba(245, 247, 244, ${this.alpha})`;
+                        ctx.shadowBlur = 4;
+                        ctx.shadowColor = "rgba(255, 255, 255, 0.3)";
+                    } else {
+                        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                    }
                     ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
                 }
                 ctx.restore();
@@ -220,7 +253,7 @@
 
         if (currentSkin.effect === 'fog' || currentSkin.effect === 'snow') {
             particles = [];
-            let count = currentSkin.effect === 'fog' ? 30 : 150;
+            let count = currentSkin.effect === 'fog' ? 35 : 100;
             for (let i = 0; i < count; i++) particles.push(new Particle(currentSkin.effect));
         }
 
@@ -233,14 +266,34 @@
                 g.addColorStop(0, '#f5edd7'); g.addColorStop(0.6, '#dfd5c3'); g.addColorStop(1, '#c0b49c');
                 ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
             } else {
-                ctx.fillStyle = currentSkin.bgColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => { p.update(); p.draw(); });
+                if (fileName === 'novel4') {
+                    // ✨ 极致丝滑的莫兰迪流体渐变算法：加入正弦波动态偏移，让颜色流动毫无顿挫感
+                    time += 0.002; // 控制渐变流速（极度缓慢优雅）
+                    let offset1 = Math.sin(time) * 15;
+                    let offset2 = Math.cos(time * 0.8) * 15;
+
+                    let grad = ctx.createLinearGradient(0 - offset1, 0 + offset2, canvas.width + offset1, canvas.height - offset2);
+                    grad.addColorStop(0, '#a3b19b');   // 莫兰迪豆沙新绿
+                    grad.addColorStop(0.5, '#8fa499'); // 莫兰迪烟雾松石绿
+                    grad.addColorStop(1, '#e2dcd0');   // 莫兰迪暖沙灰金
+                    
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    // 绘制缓缓升腾的优雅气泡
+                    particles.forEach(p => { p.update(); p.draw(); });
+
+                } else {
+                    ctx.fillStyle = currentSkin.bgColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    particles.forEach(p => { p.update(); p.draw(); });
+                }
             }
             requestAnimationFrame(animate);
         }
         animate();
 
-        // --- 💎 核心升级：强力兼容的多格式章节解析算法 ---
+        // 核心匹配算法
         if (fileName) {
             marked.setOptions({ breaks: true, gfm: true });
             fetch(`novels/${fileName}.md`)
@@ -249,12 +302,7 @@
                     let idx = 0;
                     let lines = text.split('\n').map(l => {
                         let t = l.trim();
-                        
-                        // 正则升级：
-                        // 1. 匹配类似《第一章》或 1. 这种原本的格式
-                        // 2. 匹配 1-1, 1-2, 2-1 这种复合工业章节格式
-                        // 3. 匹配独立的一行纯数字 3 或 4
-                        if (/^《.*》$/.test(t) || /^\d+\.$/.test(t) || /^\d+-\d+$/.test(t) || /^\d+$/.test(t)) {
+                        if (/^《.*》$/.test(t) || /^\d+\.$/.test(t) || /^\d+-\d+$/.test(t) || /^\d+$/.test(t) || /^\d+\.\d+$/.test(t) || /^番外.*$/.test(t)) {
                             idx++; 
                             return `<div id="chapter-${idx}" class="chapter-node">${t}</div>`;
                         }
