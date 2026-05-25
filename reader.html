@@ -51,17 +51,17 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ✨ 左侧隐藏抽屉核心样式 */
+        /* ✨ 左侧隐藏抽屉核心样式（针对手机端加强了隐藏权重） */
         .sidebar-drawer {
             position: fixed;
             top: 0;
-            left: -280px; /* 默认完全隐藏在左侧屏幕外 */
+            left: -280px !important; /* 强制完全隐藏在左侧屏幕外 */
             width: 260px;
             height: 100vh;
             z-index: 100;
         }
         .sidebar-drawer.open {
-            left: 0; /* 点击时平滑滑出 */
+            left: 0 !important; /* 点击时平滑滑出 */
         }
 
         /* ✨ 触发菜单的悬浮小纽扣 */
@@ -189,27 +189,28 @@
         const urlParams = new URLSearchParams(window.location.search);
         const fileName = urlParams.get('file');
 
+        /* 🛠️ 已经在此处全部修正为你的本地路径：'novels/musics/xxx.mp3' */
         const skins = {
             'novel1': {
                 effect: 'candle', bgColor: '#dfd5c3', paperBg: '#fdfbf7', textColor: '#2c2421', subText: '#786b65',
                 borderColor: 'rgba(140, 58, 29, 0.25)', accentColor: '#8c3a1d', panelBg: 'rgba(253, 251, 247, 0.98)', 
                 panelText: '#3e3631', trackColor: 'rgba(140, 58, 29, 0.2)', ambientTitle: '🕯️ 暖伤阅览室',
-                sound1: { label: '🔥 炉火劈啪', src: 'https://music.163.com/song/media/outer/url?id=453089456.mp3' },
-                sound2: { label: '🌧️ 窗外夜雨', src: 'https://music.163.com/song/media/outer/url?id=453089458.mp3' }
+                sound1: { label: '🔥 炉火劈啪', src: 'novels/musics/炉火劈啪.mp3' },
+                sound2: { label: '🌧️ 窗外夜雨', src: 'novels/musics/窗外夜雨.mp3' }
             },
             'novel2': {
                 effect: 'fog', bgColor: '#0f1715', paperBg: '#18221f', textColor: '#e2e8f0', subText: '#8ca39e',
                 borderColor: 'rgba(92, 143, 128, 0.3)', accentColor: '#a78bfa', panelBg: 'rgba(24, 34, 31, 0.98)', 
                 panelText: '#e2e8f0', trackColor: 'rgba(167, 139, 250, 0.3)', ambientTitle: '👁️ 悬疑解谜室',
-                sound1: { label: '🔮 梦境风铃', src: 'https://music.163.com/song/media/outer/url?id=1383021481.mp3' },
-                sound2: { label: '🍃 荒野冷风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' }
+                sound1: { label: '🔮 梦境风铃', src: 'novels/musics/梦境风铃.mp3' },
+                sound2: { label: '🍃 荒野冷风', src: 'novels/musics/荒野冷风.mp3' }
             },
             'novel3': {
                 effect: 'snow', bgColor: '#2d3436', paperBg: '#ececec', textColor: '#2d3436', subText: '#636e72',
                 borderColor: '#636e72', accentColor: '#d35400', panelBg: 'rgba(45, 52, 54, 0.98)', 
                 panelText: '#fdfdfd', trackColor: 'rgba(211, 84, 0, 0.3)', ambientTitle: '⚙️ 工业沉浮室',
-                sound1: { label: '⚙️ 钢铁鸣响', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
-                sound2: { label: '❄️ 寒冬凛风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' } 
+                sound1: { label: '⚙️ 钢铁鸣响', src: 'novels/musics/钢铁鸣响.mp3' }, 
+                sound2: { label: '❄️ 寒冬凛风', src: 'novels/musics/寒冬凛风.mp3' } 
             },
             'novel4': {
                 effect: 'snow', 
@@ -223,8 +224,8 @@
                 panelText: '#2e382b', 
                 trackColor: 'rgba(90, 107, 92, 0.2)', 
                 ambientTitle: '🌱 寂静森林独白室',
-                sound1: { label: '🎵 森林木琴', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
-                sound2: { label: '🍃 旷野清风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' } 
+                sound1: { label: '🎵 森林木琴', src: 'novels/musics/森林木琴.mp3' }, 
+                sound2: { label: '🍃 旷野清风', src: 'novels/musics/旷野清风.mp3' } 
             }
         };
 
@@ -248,7 +249,7 @@
         const audio2 = document.getElementById('audio-2');
         audio1.src = currentSkin.sound1.src; audio2.src = currentSkin.sound2.src;
 
-        // ✨ 侧边抽屉滑动核心 JS 控制逻辑
+        // 侧边抽屉滑动核心 JS 控制逻辑
         const menuBtn = document.getElementById('menu-btn');
         const leftDrawer = document.getElementById('left-drawer');
         const drawerOverlay = document.getElementById('drawer-overlay');
