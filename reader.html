@@ -41,19 +41,67 @@
             letter-spacing: 0.15em;
         }
 
+        /* 统一的玻璃态质感 */
         .glass-panel {
             border: 1px solid var(--border-color, rgba(140, 58, 29, 0.3));
-            background: var(--panel-bg, rgba(253, 251, 247, 0.85));
+            background: var(--panel-bg, rgba(253, 251, 247, 0.95));
             color: var(--panel-text, #2c2421);
-            backdrop-filter: blur(8px);
-            transition: all 0.5s ease;
+            backdrop-filter: blur(12px);
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .exit-button {
-            position: fixed; left: 2rem; top: 50%; transform: translateY(-50%);
-            writing-mode: vertical-rl; letter-spacing: 0.2em; padding: 1.5rem 0.6rem; z-index: 50; cursor: pointer;
-        }
-        .exit-button:hover { background: var(--accent-color, #8c3a1d) !important; color: #fdfbf7 !important; border-color: var(--accent-color, #8c3a1d) !important; }
 
+        /* ✨ 左侧隐藏抽屉核心样式 */
+        .sidebar-drawer {
+            position: fixed;
+            top: 0;
+            left: -280px; /* 默认完全隐藏在左侧屏幕外 */
+            width: 260px;
+            height: 100vh;
+            z-index: 100;
+        }
+        .sidebar-drawer.open {
+            left: 0; /* 点击时平滑滑出 */
+        }
+
+        /* ✨ 触发菜单的悬浮小纽扣 */
+        .drawer-toggle-btn {
+            position: fixed;
+            left: 1rem;
+            top: 1.5rem;
+            z-index: 90;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .drawer-toggle-btn:hover {
+            transform: scale(1.05);
+            background: var(--accent-color, #8c3a1d) !important;
+            color: #ffffff !important;
+        }
+
+        /* 点击抽屉外面时的半透明遮罩层 */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(2px);
+            z-index: 95;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .drawer-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 侧边章节进度栏 */
         .progress-sidebar {
             position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
             display: flex; flex-direction: column; gap: 0.8rem;
@@ -84,36 +132,53 @@
 </head>
 <body class="antialiased py-20 px-4"> <canvas id="bg-effect-canvas"></canvas>
 
-    <a href="novels.html" class="exit-button glass-panel rounded-md text-xs font-bold text-center">
-        ← 归还书架
-    </a>
-
-    <div id="sidebar-progress" class="progress-sidebar hidden md:flex flex-col"></div>
-
-    <div class="fixed bottom-8 left-8 z-50 glass-panel p-4 rounded-xl flex flex-col gap-3 text-xs">
-        <div class="font-bold border-b pb-1 mb-1 flex items-center gap-1" id="ambient-title" style="border-color: var(--border-color)">
-            <span>⚙️</span> 环境调音台
-        </div>
-        <div class="flex items-center justify-between gap-4">
-            <label class="cursor-pointer flex items-center gap-1">
-                <input type="checkbox" id="sound1-toggle" class="rounded focus:ring-0">
-                <span id="sound1-label">🔥 环境 A</span>
-            </label>
-            <input type="range" id="sound1-volume" min="0" max="1" step="0.1" value="0.5" class="w-16">
-        </div>
-        <div class="flex items-center justify-between gap-4">
-            <label class="cursor-pointer flex items-center gap-1">
-                <input type="checkbox" id="sound2-toggle" class="rounded focus:ring-0">
-                <span id="sound2-label">🌧️ 环境 B</span>
-            </label>
-            <input type="range" id="sound2-volume" min="0" max="1" step="0.1" value="0.5" class="w-16">
-        </div>
+    <div id="menu-btn" class="drawer-toggle-btn glass-panel text-lg shadow-md">
+        ☰
     </div>
+
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+
+    <aside id="left-drawer" class="sidebar-drawer glass-panel p-6 flex flex-col justify-between">
+        <div>
+            <div class="mb-8 border-b pb-4" style="border-color: var(--border-color)">
+                <h3 class="text-xs uppercase tracking-widest font-sans font-bold opacity-60 mb-3">阅览室导航</h3>
+                <a href="novels.html" class="inline-flex items-center gap-2 text-sm font-medium hover:opacity-70 transition">
+                    ← 归还书架
+                </a>
+            </div>
+
+            <div class="flex flex-col gap-4 text-xs font-sans">
+                <div class="font-bold border-b pb-1 mb-1 flex items-center gap-1" id="ambient-title" style="border-color: var(--border-color)">
+                    <span>⚙️</span> 环境调音台
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                    <label class="cursor-pointer flex items-center gap-1.5 truncate max-w-[130px]">
+                        <input type="checkbox" id="sound1-toggle" class="rounded focus:ring-0">
+                        <span id="sound1-label" class="truncate">环境 A</span>
+                    </label>
+                    <input type="range" id="sound1-volume" min="0" max="1" step="0.1" value="0.5" class="w-20">
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                    <label class="cursor-pointer flex items-center gap-1.5 truncate max-w-[130px]">
+                        <input type="checkbox" id="sound2-toggle" class="rounded focus:ring-0">
+                        <span id="sound2-label" class="truncate">环境 B</span>
+                    </label>
+                    <input type="range" id="sound2-volume" min="0" max="1" step="0.1" value="0.5" class="w-20">
+                </div>
+            </div>
+        </div>
+
+        <div class="text-[9px] opacity-40 font-mono tracking-wider">
+            MUSEUM OF CONTENT
+        </div>
+    </aside>
+
+    <div id="sidebar-progress" class="progress-sidebar hidden lg:flex flex-col"></div>
 
     <audio id="audio-1" loop></audio>
     <audio id="audio-2" loop></audio>
 
-    <div class="max-w-3xl mx-auto relative">
+    <div class="max-w-3xl mx-auto relative mt-6 md:mt-0">
         <article id="content" class="reader-paper p-6 md:p-12 rounded-sm">
             <div class="flex justify-center items-center py-20 text-stone-400 italic">正在布置阅览室...</div>
         </article>
@@ -127,35 +192,34 @@
         const skins = {
             'novel1': {
                 effect: 'candle', bgColor: '#dfd5c3', paperBg: '#fdfbf7', textColor: '#2c2421', subText: '#786b65',
-                borderColor: 'rgba(140, 58, 29, 0.25)', accentColor: '#8c3a1d', panelBg: 'rgba(253, 251, 247, 0.9)', 
+                borderColor: 'rgba(140, 58, 29, 0.25)', accentColor: '#8c3a1d', panelBg: 'rgba(253, 251, 247, 0.98)', 
                 panelText: '#3e3631', trackColor: 'rgba(140, 58, 29, 0.2)', ambientTitle: '🕯️ 暖伤阅览室',
                 sound1: { label: '🔥 炉火劈啪', src: 'https://music.163.com/song/media/outer/url?id=453089456.mp3' },
                 sound2: { label: '🌧️ 窗外夜雨', src: 'https://music.163.com/song/media/outer/url?id=453089458.mp3' }
             },
             'novel2': {
                 effect: 'fog', bgColor: '#0f1715', paperBg: '#18221f', textColor: '#e2e8f0', subText: '#8ca39e',
-                borderColor: 'rgba(92, 143, 128, 0.3)', accentColor: '#a78bfa', panelBg: 'rgba(24, 34, 31, 0.85)', 
+                borderColor: 'rgba(92, 143, 128, 0.3)', accentColor: '#a78bfa', panelBg: 'rgba(24, 34, 31, 0.98)', 
                 panelText: '#e2e8f0', trackColor: 'rgba(167, 139, 250, 0.3)', ambientTitle: '👁️ 悬疑解谜室',
                 sound1: { label: '🔮 梦境风铃', src: 'https://music.163.com/song/media/outer/url?id=1383021481.mp3' },
                 sound2: { label: '🍃 荒野冷风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' }
             },
             'novel3': {
                 effect: 'snow', bgColor: '#2d3436', paperBg: '#ececec', textColor: '#2d3436', subText: '#636e72',
-                borderColor: '#636e72', accentColor: '#d35400', panelBg: 'rgba(45, 52, 54, 0.9)', 
+                borderColor: '#636e72', accentColor: '#d35400', panelBg: 'rgba(45, 52, 54, 0.98)', 
                 panelText: '#fdfdfd', trackColor: 'rgba(211, 84, 0, 0.3)', ambientTitle: '⚙️ 工业沉浮室',
                 sound1: { label: '⚙️ 钢铁鸣响', src: 'https://music.163.com/song/media/outer/url?id=1413813890.mp3' }, 
                 sound2: { label: '❄️ 寒冬凛风', src: 'https://music.163.com/song/media/outer/url?id=4862040.mp3' } 
             },
-            /* 🌿 莫兰迪色系升级：克制、治愈、无刺眼荧光，保留呼吸气泡逻辑 */
             'novel4': {
-                effect: 'snow', // 复用粒子基类结构
-                bgColor: '#a3b19b', // 莫兰迪豆沙新绿底色
-                paperBg: '#f4f6f3', // 极其淡雅优雅的莫兰迪灰绿纸张
-                textColor: '#2e382b', // 克制的灰黑绿字，柔和不伤眼
+                effect: 'snow', 
+                bgColor: '#a3b19b', 
+                paperBg: '#f4f6f3', 
+                textColor: '#2e382b', 
                 subText: '#697565', 
                 borderColor: 'rgba(163, 177, 155, 0.4)', 
-                accentColor: '#5a6b5c', // 莫兰迪深青绿作为强调色
-                panelBg: 'rgba(244, 246, 243, 0.9)', 
+                accentColor: '#5a6b5c', 
+                panelBg: 'rgba(244, 246, 243, 0.98)', 
                 panelText: '#2e382b', 
                 trackColor: 'rgba(90, 107, 92, 0.2)', 
                 ambientTitle: '🌱 寂静森林独白室',
@@ -184,6 +248,23 @@
         const audio2 = document.getElementById('audio-2');
         audio1.src = currentSkin.sound1.src; audio2.src = currentSkin.sound2.src;
 
+        // ✨ 侧边抽屉滑动核心 JS 控制逻辑
+        const menuBtn = document.getElementById('menu-btn');
+        const leftDrawer = document.getElementById('left-drawer');
+        const drawerOverlay = document.getElementById('drawer-overlay');
+
+        function openDrawer() {
+            leftDrawer.classList.add('open');
+            drawerOverlay.classList.add('show');
+        }
+        function closeDrawer() {
+            leftDrawer.classList.remove('open');
+            drawerOverlay.classList.remove('show');
+        }
+        menuBtn.addEventListener('click', openDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        // Canvas 动效代码
         const canvas = document.getElementById('bg-effect-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -192,7 +273,7 @@
 
         let particles = [];
         let candleRadius = 0, candleTargetRadius = 400;
-        let time = 0; // 用于平滑渐变流动的计时器
+        let time = 0;
 
         class Particle {
             constructor(type) { this.type = type; this.init(); }
@@ -204,18 +285,17 @@
                     this.vy = -(Math.random() * 0.3 + 0.1);
                     this.alpha = Math.random() * 0.06 + 0.03;
                 } else {
-                    // novel4：气泡无声自下而上升腾
                     if (fileName === 'novel4') {
                         this.y = canvas.height + Math.random() * canvas.height;
-                        this.vy = -(Math.random() * 0.8 + 0.3); // 降低上升速度，呈现宁静呼吸感
-                        this.size = Math.random() * 4 + 1.5;   // 略微调大一点气泡感
+                        this.vy = -(Math.random() * 0.8 + 0.3); 
+                        this.size = Math.random() * 4 + 1.5;   
                     } else {
                         this.y = Math.random() * -canvas.height;
                         this.vy = Math.random() * 2 + 1; 
                         this.size = Math.random() * 3 + 1;
                     }
-                    this.vx = Math.random() * 0.4 - 0.2; // 稍微带有一点左右平移，像水里上升的真实气泡
-                    this.alpha = Math.random() * 0.4 + 0.15; // 莫兰迪克制半透明
+                    this.vx = Math.random() * 0.4 - 0.2; 
+                    this.alpha = Math.random() * 0.4 + 0.15; 
                 }
             }
             update() {
@@ -238,7 +318,6 @@
                     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
                 } else {
                     if (fileName === 'novel4') {
-                        // ✨ 莫兰迪质感：剔除高饱绿和粉红荧光，换用半透明柔白/浅沙金气泡
                         ctx.fillStyle = `rgba(245, 247, 244, ${this.alpha})`;
                         ctx.shadowBlur = 4;
                         ctx.shadowColor = "rgba(255, 255, 255, 0.3)";
@@ -267,22 +346,16 @@
                 ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
             } else {
                 if (fileName === 'novel4') {
-                    // ✨ 极致丝滑的莫兰迪流体渐变算法：加入正弦波动态偏移，让颜色流动毫无顿挫感
-                    time += 0.002; // 控制渐变流速（极度缓慢优雅）
+                    time += 0.002; 
                     let offset1 = Math.sin(time) * 15;
                     let offset2 = Math.cos(time * 0.8) * 15;
-
                     let grad = ctx.createLinearGradient(0 - offset1, 0 + offset2, canvas.width + offset1, canvas.height - offset2);
-                    grad.addColorStop(0, '#a3b19b');   // 莫兰迪豆沙新绿
-                    grad.addColorStop(0.5, '#8fa499'); // 莫兰迪烟雾松石绿
-                    grad.addColorStop(1, '#e2dcd0');   // 莫兰迪暖沙灰金
-                    
+                    grad.addColorStop(0, '#a3b19b');   
+                    grad.addColorStop(0.5, '#8fa499'); 
+                    grad.addColorStop(1, '#e2dcd0');   
                     ctx.fillStyle = grad;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    // 绘制缓缓升腾的优雅气泡
                     particles.forEach(p => { p.update(); p.draw(); });
-
                 } else {
                     ctx.fillStyle = currentSkin.bgColor;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -293,7 +366,7 @@
         }
         animate();
 
-        // 核心匹配算法
+        // Markdown及章节渲染
         if (fileName) {
             marked.setOptions({ breaks: true, gfm: true });
             fetch(`novels/${fileName}.md`)
