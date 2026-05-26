@@ -51,20 +51,20 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ✨ 左侧隐藏抽屉核心样式（针对手机端加强了隐藏权重） */
+        /* 左侧隐藏抽屉核心样式 */
         .sidebar-drawer {
             position: fixed;
             top: 0;
-            left: -280px !important; /* 强制完全隐藏在左侧屏幕外 */
+            left: -280px !important; /* 默认完全隐藏在屏幕外 */
             width: 260px;
             height: 100vh;
             z-index: 100;
         }
         .sidebar-drawer.open {
-            left: 0 !important; /* 点击时平滑滑出 */
+            left: 0 !important; /* 打开时平滑滑出 */
         }
 
-        /* ✨ 触发菜单的悬浮小纽扣 */
+        /* 触发菜单的悬浮小纽扣 */
         .drawer-toggle-btn {
             position: fixed;
             left: 1rem;
@@ -189,7 +189,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const fileName = urlParams.get('file');
 
-        /* 🛠️ 已经在此处全部修正为你的本地路径：'novels/musics/xxx.mp3' */
         const skins = {
             'novel1': {
                 effect: 'candle', bgColor: '#dfd5c3', paperBg: '#fdfbf7', textColor: '#2c2421', subText: '#786b65',
@@ -249,7 +248,7 @@
         const audio2 = document.getElementById('audio-2');
         audio1.src = currentSkin.sound1.src; audio2.src = currentSkin.sound2.src;
 
-        // 侧边抽屉滑动核心 JS 控制逻辑
+        // 侧边抽屉滑动核心控制
         const menuBtn = document.getElementById('menu-btn');
         const leftDrawer = document.getElementById('left-drawer');
         const drawerOverlay = document.getElementById('drawer-overlay');
@@ -338,30 +337,42 @@
         }
 
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (currentSkin.effect === 'candle') {
-                if (Math.random() > 0.93) candleTargetRadius = Math.random() * 150 + 350;
-                candleRadius += (candleTargetRadius - candleRadius) * 0.08;
-                let g = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, candleRadius);
-                g.addColorStop(0, '#f5edd7'); g.addColorStop(0.6, '#dfd5c3'); g.addColorStop(1, '#c0b49c');
-                ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            } else {
-                if (fileName === 'novel4') {
-                    time += 0.002; 
-                    let offset1 = Math.sin(time) * 15;
-                    let offset2 = Math.cos(time * 0.8) * 15;
-                    let grad = ctx.createLinearGradient(0 - offset1, 0 + offset2, canvas.width + offset1, canvas.height - offset2);
-                    grad.addColorStop(0, '#a3b19b');   
-                    grad.addColorStop(0.5, '#8fa499'); 
-                    grad.addColorStop(1, '#e2dcd0');   
-                    ctx.fillStyle = grad;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    particles.forEach(p => { p.update(); p.draw(); });
+            try {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (currentSkin.effect === 'candle') {
+                    if (Math.random() > 0.93) candleTargetRadius = Math.random() * 150 + 350;
+                    candleRadius += (candleTargetRadius - candleRadius) * 0.08;
+                    let g = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, candleRadius);
+                    g.addColorStop(0, '#f5edd7'); g.addColorStop(0.6, '#dfd5c3'); g.addColorStop(1, '#c0b49c');
+                    ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 } else {
-                    ctx.fillStyle = currentSkin.bgColor;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    particles.forEach(p => { p.update(); p.draw(); });
+                    if (fileName === 'novel4') {
+                        time += 0.002; 
+                        let offset1 = Math.sin(time) * 15;
+                        let offset2 = Math.cos(time * 0.8) * 15;
+                        
+                        /* ✨ 【核心修复】使用 Math.max 确保绝对不会传入负数，完美兼容移动端 */
+                        let startX = Math.max(0, 0 - offset1);
+                        let startY = Math.max(0, 0 + offset2);
+                        let endX = Math.max(startX + 10, canvas.width + offset1);
+                        let endY = Math.max(startY + 10, canvas.height - offset2);
+                        
+                        let grad = ctx.createLinearGradient(startX, startY, endX, endY);
+                        grad.addColorStop(0, '#a3b19b');   
+                        grad.addColorStop(0.5, '#8fa499'); 
+                        grad.addColorStop(1, '#e2dcd0');   
+                        ctx.fillStyle = grad;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        particles.forEach(p => { p.update(); p.draw(); });
+                    } else {
+                        ctx.fillStyle = currentSkin.bgColor;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        particles.forEach(p => { p.update(); p.draw(); });
+                    }
                 }
+            } catch (e) {
+                /* ✨ 【安全熔断】即使有偶发兼容报错，也捕获它并继续向下运行 */
+                console.log("Canvas rendering safely catched:", e);
             }
             requestAnimationFrame(animate);
         }
@@ -385,6 +396,8 @@
                     document.getElementById('content').innerHTML = marked.parse(lines.join('\n\n'));
                     document.title = text.split('\n')[0].replace('# ', '').trim() + " - 沉浸阅读";
                     generateSidebar(idx);
+                }).catch(e => {
+                    document.getElementById('content').innerHTML = `<div class="text-center py-20 text-red-400">未能成功加载小说文本，请检查路径。</div>`;
                 });
         }
 
