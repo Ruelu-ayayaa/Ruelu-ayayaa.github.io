@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阅读 - 内容博物馆</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: "Songti SC", "SimSun", "STSong", serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #dfd5c3; 
+            color: #2c2421;
+        }
+        
+        /* 出版物精细正文排版 */
+        #content p {
+            font-size: 1.05rem;
+            line-height: 2.1;
+            margin-bottom: 1.4rem !important;
+            text-indent: 2em;
+            text-align: justify;
+        }
+
+        .reader-paper {
+            background: #fdfbf7;
+            border: 1px solid #d3c4a8;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.03);
+            min-height: 75vh;
+            position: relative;
+        }
+        
+        .reader-paper::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(to right, #8c3a1d, #d3c4a8, #8c3a1d);
+        }
+
+        /* 🌟 专属定制：极致显眼又高雅的章节第一行标题格式 */
+        .chapter-title-art {
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1a1513;
+            letter-spacing: 0.15em;
+            padding-top: 1rem;
+            padding-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px double #d3c4a8;
+            position: relative;
+        }
+        .chapter-title-art::after {
+            content: "❦";
+            position: absolute;
+            bottom: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fdfbf7;
+            padding: 0 0.8rem;
+            color: #8c3a1d;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn {
+            font-family: system-ui, sans-serif;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            background: rgba(253, 251, 247, 0.8);
+            border: 1px solid rgba(140, 58, 29, 0.2);
+            color: #8c3a1d;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover:not(:disabled) {
+            background: #8c3a1d;
+            color: #ffffff;
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="antialiased py-6 px-4 md:py-12">
+
+    <div class="max-w-3xl mx-auto flex justify-between items-center mb-6 px-1">
+        <a href="long_novels.html" class="nav-btn font-medium">
+            📋 目录
+        </a>
+        <div class="flex gap-2">
+            <button id="prev-btn" class="nav-btn">上一章</button>
+            <button id="next-btn" class="nav-btn">下一章</button>
+        </div>
+    </div>
+
+    <div class="max-w-3xl mx-auto relative">
+        <article class="reader-paper p-6 md:p-12 rounded-sm">
+            <div id="art-title-container"></div>
+            <div id="content">
+                <div id="loading" class="flex justify-center items-center py-24 text-stone-400 italic">正在翻开书页...</div>
+            </div>
+        </article>
+        <div class="mt-12 mb-16 text-center text-stone-400/60 text-xl">❦ 本章完 ❦</div>
+    </div>
+
+    <div class="max-w-3xl mx-auto flex justify-between items-center mt-4 mb-20 px-1">
+        <a href="long_novels.html" class="nav-btn">📋 回目录</a>
+        <div class="flex gap-2">
+            <button id="prev-btn-bottom" class="nav-btn">上一章</button>
+            <button id="next-btn-bottom" class="nav-btn">下一章</button>
+        </div>
+    </div>
+
+    <script>
+        const longNovelsConfig = {
+            'long1': { chaptersCount: 4 }
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const folderKey = urlParams.get('folder') || 'long1'; 
+        const currentNum = parseInt(urlParams.get('num')) || 1;
+
+        const maxChapters = longNovelsConfig[folderKey] ? longNovelsConfig[folderKey].chaptersCount : 1;
+
+        function initReader() {
+            const prevBtns = [document.getElementById('prev-btn'), document.getElementById('prev-btn-bottom')];
+            const nextBtns = [document.getElementById('next-btn'), document.getElementById('next-btn-bottom')];
+
+            if (currentNum <= 1) {
+                prevBtns.forEach(btn => btn.disabled = true);
+            } else {
+                prevBtns.forEach(btn => {
+                    btn.onclick = () => window.location.href = `long_reader.html?folder=${folderKey}&num=${currentNum - 1}`;
+                });
+            }
+
+            if (currentNum >= maxChapters) {
+                nextBtns.forEach(btn => btn.disabled = true);
+            } else {
+                nextBtns.forEach(btn => {
+                    btn.onclick = () => window.location.href = `long_reader.html?folder=${folderKey}&num=${currentNum + 1}`;
+                });
+            }
+
+            const markdownPath = `novels/long_novels/${folderKey}/chapter${currentNum}.md`;
+            marked.setOptions({ breaks: true, gfm: true });
+            
+            fetch(markdownPath)
+                .then(response => {
+                    if (!response.ok) throw new Error('File not found');
+                    return response.text();
+                })
+                .then(text => {
+                    // 🌟 核心高级截取逻辑
+                    const lines = text.split('\n');
+                    // 1. 抓取文件的第一行并清洗多余的 Markdown 标记 
+                    let firstLine = lines[0].replace('# ', '').replace('### ', '').trim();
+                    
+                    // 2. 将第一行包装进精美的独立标题样式容器中
+                    document.getElementById('art-title-container').innerHTML = `
+                        <h1 class="chapter-title-art">${firstLine}</h1>
+                    `;
+                    
+                    // 3. 将除第一行之外的其余文本重新组合，正常由 marked.js 渲染
+                    const restText = lines.slice(1).join('\n');
+                    document.getElementById('content').innerHTML = marked.parse(restText);
+                    
+                    // 4. 同步浏览器网页标签标题
+                    document.title = `${firstLine} - 连载阅读`;
+                })
+                .catch(err => {
+                    document.getElementById('content').innerHTML = `
+                        <div class="text-center py-20 text-stone-400">
+                            <p class="mb-4">🌱 作者正在挑灯夜战码字中...</p>
+                            <p class="text-xs opacity-60">未能在路径 [ ${markdownPath} ] 找到对应文件</p>
+                        </div>
+                    `;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', initReader);
+    </script>
+</body>
+</html>

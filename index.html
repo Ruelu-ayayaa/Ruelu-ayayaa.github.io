@@ -41,24 +41,28 @@
 </head>
 <body class="antialiased">
 
-    <nav class="fixed top-8 z-50 glass-effect px-6 py-3 rounded-full flex gap-2 md:gap-6 text-white/80 text-sm font-medium transition-all">
-        <a href="index.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
+    <nav class="fixed top-8 z-50 glass-effect px-6 py-3 rounded-full flex gap-1 md:gap-4 text-white/80 text-xs md:text-sm font-medium transition-all">
+        <a href="index.html" class="px-2.5 py-1 hover:text-white transition-all relative group/nav">
             🏠 首页
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-        <a href="novels.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
-            📖 小说
+        <a href="novels.html" class="px-2.5 py-1 hover:text-white transition-all relative group/nav">
+            短篇小说
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-        <a href="anime.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
+        <a href="long_novels.html" class="px-2.5 py-1 hover:text-white transition-all relative group/nav">
+            📚 长篇连载
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover/nav:w-full"></span>
+        </a>
+        <a href="anime.html" class="px-2.5 py-1 hover:text-white transition-all relative group/nav">
             🌸 动漫
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-        <a href="travel.html" class="px-3 py-1 hover:text-white transition-all relative group/nav">
+        <a href="travel.html" class="px-2.5 py-1 hover:text-white transition-all relative group/nav">
             ✈️ 游记
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
-        <a href="#lab" class="px-3 py-1 hover:text-white transition-all relative group/nav">
+        <a href="#lab" class="px-2.5 py-1 hover:text-white transition-all relative group/nav hidden md:inline-block">
             🧪 实验区
             <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover/nav:w-full"></span>
         </a>
@@ -72,19 +76,40 @@
 
         <div id="content-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            <a href="novels.html" class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-white/20 overflow-hidden block">
-                <div class="absolute -right-4 -bottom-4 text-8xl font-serif text-white/5 opacity-10 group-hover:opacity-20 transition-opacity">文</div>
-                <div class="relative z-10">
-                    <span class="px-3 py-1 bg-amber-200/20 text-amber-200 text-xs rounded-full border border-amber-200/30">📖 小说连载</span>
-                    <h3 class="text-2xl font-bold text-white mt-4 mb-3">《她说》</h3>
-                    <p class="text-white/60 text-sm leading-relaxed line-clamp-3">
-                        他们终于说出了她最想听的话，在她死后，讲给一个听不懂中文的外国人听...
-                    </p>
-                    <div class="mt-6 flex items-center text-amber-200 text-sm font-medium">
-                        阅读全文 <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+            <div class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:bg-white/20 flex flex-col justify-between overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 text-8xl font-serif text-white/5 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">文</div>
+                
+                <div class="w-full">
+                    <span class="px-3 py-1 bg-amber-200/20 text-amber-200 text-xs rounded-full border border-amber-200/30">✍️ 小说主展厅</span>
+                    <h3 class="text-2xl font-bold text-white mt-4 mb-6">小说文献库</h3>
+                    
+                    <div class="flex flex-col gap-4">
+                        <a href="novels.html" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition duration-300 group/sub">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="text-white font-medium text-base group-hover/sub:text-amber-200 transition">☕ 短篇陈列室</h4>
+                                    <p class="text-white/50 text-xs mt-1">收录《她说》、《槐安》等高沉浸感声音短篇</p>
+                                </div>
+                                <span class="text-white/40 group-hover/sub:translate-x-1 transition-transform">→</span>
+                            </div>
+                        </a>
+
+                        <a href="long_novels.html" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition duration-300 group/sub">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="text-white font-medium text-base group-hover/sub:text-amber-300 transition">📖 连载长篇馆</h4>
+                                    <p class="text-white/50 text-xs mt-1">先看目录，纯净阅读。包含宏大世界观的长篇巨作</p>
+                                </div>
+                                <span class="text-white/40 group-hover/sub:translate-x-1 transition-transform">→</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            </a>
+                
+                <div class="mt-6 text-xs text-white/40 font-mono">
+                    STAT: SERIALIZING & ARCHIVED
+                </div>
+            </div>
 
             <a href="anime.html" class="group relative glass-effect rounded-3xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] block">
                 <div class="relative z-10">
@@ -106,7 +131,7 @@
                     <h3 class="text-2xl font-bold text-white mt-4 mb-3">在苏杭的雨天弄丢地图</h3>
                     <p class="text-white/60 text-sm mb-4">不一定要去寺庙，那些藏在巷子里的老茶屋才是灵魂所在...</p>
                     <div class="flex gap-2 mb-4">
-                        <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white/80"># 日本</span>
+                        <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white/80"># 江浙</span>
                         <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white/80"># 摄影</span>
                     </div>
                     <div class="mt-2 flex items-center text-emerald-200 text-sm font-medium">
@@ -180,7 +205,6 @@
     </style>
 
     <script>
-        // 1. 控制电台播放与CD旋转
         let isPlaying = false;
         function togglePlay() {
             const cd = document.getElementById('cd-icon');
@@ -196,7 +220,6 @@
             }
         }
 
-        // 2. 实验区：动态修改全站渐变背景
         function changeMood(mood) {
             if(mood === 'romantic') {
                 document.body.style.background = "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)";

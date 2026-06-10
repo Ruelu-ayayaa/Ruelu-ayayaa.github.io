@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>长篇馆 - 内容博物館</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #f4f4f2 0%, #eaeae6 70%, #dfdfda 100%);
+            color: #1e293b;
+            font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            min-height: 100vh;
+        }
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        .museum-card {
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .museum-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+        }
+        /* 弹窗高级毛玻璃 */
+        .modal-blur {
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="antialiased pb-24">
+
+    <nav class="nav-glass sticky top-0 z-50 px-6 py-4 flex justify-between items-center border-b">
+        <div class="flex items-center gap-3">
+            <span class="text-xs font-mono tracking-widest text-slate-400">MUSEUM OF CONTENT</span>
+            <span class="h-4 w-[1px] bg-slate-300"></span>
+            <span class="text-sm font-medium text-slate-700 tracking-wider">长篇小说特展</span>
+        </div>
+        <a href="index.html" class="text-xs font-medium text-slate-500 hover:text-slate-800 transition tracking-wide">
+            ← 返回精神角落
+        </a>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 mt-16">
+        <header class="mb-16 text-center lg:text-left">
+            <h1 class="text-3xl font-extralight text-slate-900 tracking-tight mb-2">连载长篇陈列室</h1>
+            <p class="text-xs text-slate-400 font-mono tracking-widest uppercase">SERIALIZED LONG NOVELS ARCHIVE</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div onclick="openCatalog('long1')" class="museum-card rounded-xl p-8 flex flex-col justify-between min-h-[320px] cursor-pointer group">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[9px] uppercase px-2.5 py-1 rounded-full font-mono tracking-wider bg-amber-100 text-amber-800"># 长篇连载 · 奇幻</span>
+                        <span class="text-[10px] font-mono text-slate-400">LONG_01</span>
+                    </div>
+                    <h2 class="text-xl font-normal text-slate-800 mb-3 tracking-wide group-hover:text-amber-800 transition">谁说主角一定要拯救世界</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed font-light mb-6">轮回往复的囚笼中，破局和拯救，从来都不是怜悯与妥协。...</p>
+                </div>
+                <div class="mt-6 flex justify-between items-center text-[10px] text-slate-400 uppercase tracking-tighter border-t pt-4 border-slate-200/40">
+                    <span>⏳ 持续更新中</span>
+                    <span class="text-amber-700 font-medium group-hover:translate-x-1 transition-transform">查阅目录 →</span>
+                </div>
+            </div>
+
+            </div>
+    </main>
+
+    <div id="catalog-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 modal-blur" onclick="closeCatalog(event)">
+        <div id="modal-box" class="bg-stone-50/95 border border-white max-w-xl w-full rounded-2xl p-8 shadow-2xl transition-all scale-95 duration-300 opacity-0 max-h-[80vh] flex flex-col justify-between" onclick="event.stopPropagation()">
+            <div>
+                <div class="flex justify-between items-center mb-6 border-b pb-4 border-slate-200">
+                    <div>
+                        <h3 id="modal-title" class="text-lg font-medium text-slate-800">小说目录</h3>
+                        <p class="text-[9px] text-slate-400 font-mono tracking-wider uppercase mt-0.5">TABLE OF CONTENTS</p>
+                    </div>
+                    <button onclick="closeCatalog(null)" class="text-slate-400 hover:text-slate-700 text-sm font-mono p-1">✕ CLOSE</button>
+                </div>
+                
+                <div id="modal-catalog-list" class="flex flex-col gap-2 overflow-y-auto max-h-[45vh] pr-2 text-sm text-slate-600">
+                    </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-200/60 text-right text-xs font-mono text-slate-400" id="modal-total-count">
+                共 -- 章
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🌟 小说数据配置库
+        const longNovelsConfig = {
+            'long1': {
+                title: '时间遗忘的编年史',
+                chapters: [
+                    "第一章 隘村",
+                    "第二章 打探",
+                    "第三章 小孩",
+                    "第四章 真相",
+                    "第五章 出逃"
+                ]
+            }
+        };
+
+        // 打开弹窗并渲染对应小说的目录
+        function openCatalog(bookKey) {
+            const bookData = longNovelsConfig[bookKey];
+            if (!bookData) return;
+
+            document.getElementById('modal-title').innerText = bookData.title;
+            document.getElementById('modal-total-count').innerText = `🎨 馆藏：共 ${bookData.chapters.length} 章节`;
+
+            const listContainer = document.getElementById('modal-catalog-list');
+            listContainer.innerHTML = '';
+
+            bookData.chapters.forEach((chapName, index) => {
+                const chapNum = index + 1;
+                const link = document.createElement('a');
+                link.href = `long_reader.html?folder=${bookKey}&num=${chapNum}`;
+                link.className = "flex items-center justify-between py-2.5 px-4 rounded-lg bg-white/40 hover:bg-white hover:text-amber-900 border border-transparent hover:border-slate-200/80 transition shadow-sm group/item";
+                link.innerHTML = `
+                    <span class="font-light">${chapName}</span>
+                    <span class="text-xs text-slate-300 group-hover/item:text-amber-700 font-mono transition">READ →</span>
+                `;
+                listContainer.appendChild(link);
+            });
+
+            // 显示并附带丝滑动画
+            const modal = document.getElementById('catalog-modal');
+            const box = document.getElementById('modal-box');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // 关闭弹窗
+        function closeCatalog(e) {
+            const box = document.getElementById('modal-box');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                document.getElementById('catalog-modal').add('hidden');
+            }, 300);
+            document.getElementById('catalog-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
